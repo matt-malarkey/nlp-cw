@@ -15,7 +15,9 @@
 \usepackage[hyperref]{acl2019}
 \usepackage{times}
 \usepackage{latexsym}
-
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfig}
 \usepackage{url}
 
 \aclfinalcopy % Uncomment this line for the final submission
@@ -39,40 +41,33 @@
 
 \begin{document}
 \maketitle
-\begin{abstract}
-  This document contains the instructions for preparing a camera-ready
-  manuscript for the proceedings of ACL 2019. The document itself
-  conforms to its own specifications, and is therefore an example of
-  what your manuscript should look like. These instructions should be
-  used for both papers submitted for review and for final versions of
-  accepted papers.  Authors are asked to conform to all the directions
-  reported in this document.
-\end{abstract}
 
-\section{Credits}
+\section{Data Analysis}
 
-This document has been adapted from the instructions
-for earlier ACL and NAACL proceedings,
-including 
-those for 
-NAACL 2019 by Stephanie Lukin and Alla Roskovskaya, 
-ACL 2018 by Shay Cohen, Kevin Gimpel, and Wei Lu, 
-NAACL 2018 by Margaret Michell and Stephanie Lukin,
-2017/2018 (NA)ACL bibtex suggestions from Jason Eisner,
-ACL 2017 by Dan Gildea and Min-Yen Kan, 
-NAACL 2017 by Margaret Mitchell, 
-ACL 2012 by Maggie Li and Michael White, 
-those from ACL 2010 by Jing-Shing Chang and Philipp Koehn, 
-those for ACL 2008 by JohannaD. Moore, Simone Teufel, James Allan, and Sadaoki Furui, 
-those for ACL 2005 by Hwee Tou Ng and Kemal Oflazer, 
-those for ACL 2002 by Eugene Charniak and Dekang Lin, 
-and earlier ACL and EACL formats.
-Those versions were written by several
-people, including John Chen, Henry S. Thompson and Donald
-Walker. Additional elements were taken from the formatting
-instructions of the \emph{International Joint Conference on Artificial
-  Intelligence} and the \emph{Conference on Computer Vision and
-  Pattern Recognition}.
+There are a number of ways to judge the humour of a sentence and this is evident from the fact that people perceive humour in different ways. The dataset was created by having participants apply microedits to headlines with the goal of making them funny, and as the funniness was judged by multiple people who may find different things funny, it’s worth considering what all the different strategies are that generate humour in general life and also in headlines. 
+
+Being a dataset of headlines, it makes sense that there will probably be some key themes that exist in multiple headlines, as many news stories will be covering the same thing. Moreover, as the headlines are collected from the subreddits ‘r/worldnews’ and ‘r/politics’ on Reddit, it’s no surprise that a majority of headlines often deal with U.S. politics as the latter subreddit focuses on this subject. This is reflected in the dataset where we see that one of the most common words appearing in 39.11% of headlines is ‘Trump’, with the word ‘Donald’ not far behind. 
+
+One technique for creating humour is through satire, which is often used to comment on issues with individuals or on society in general, commonly with a focus on politics. Therefore, it’s worth looking at whether headlines containing ‘Trump’ are in general funnier than others as it may be easier to generate satirical humour from these.  From our analysis, we found that the average funniness score for ‘Trump’ headlines was 1.02, which is higher than the training dataset average of 0.94, and furthermore, the proportion of ‘Trump’ headlines with a score greater than 1 was 42.38%, indicating that if a headline contains ‘Trump’, it’s likely to be funnier than if it doesn’t.
+
+Another good way to generate humour is through context and there are a few ways this can be looked at in terms of the dataset. First of all, certain microedits may be funny because they’re related to the original word either semantically or through pronunciation. On the other hand, you could argue that if the two words are so unrelated to each other then the surrealness of the edit makes the headline funny. To check this, we looked at how the word similarity between the original and edit word correlates to the funniness, and the similarity was computed through the cosine distance of the GloVe vectors for those words. Figure \ref{fig:word_sim} shows that the score is highest when the distance is smaller, meaning that headlines are on average funnier if there is a semantic similarity between the words in the microedit. Figure \ref{fig:lev_dist} analyses the similarity between words based on their spelling and shows that the funniness of a headline isn’t determined by if two words are spelt similarly like ‘pie’ and ‘lie’. 
+
+Finally, just as we looked at the context between the two words in the microedit, it’s worth looking at the context between the entire headline and the edited word, and in Figure \ref{fig:sent_sim}] we again see a similar trend in that the smaller the distance, the funnier the headline. Building on this, we can say that jokes often involve setting up some context before delivering a punchline, and so a reasonable hypothesis could be that as longer headlines give more room to establish a context, then the longer the headline the funnier it may be. Figure \ref{fig:headline_len} shows that actually if a headline is too short or too long then it’s unlikely to be funny, and so the headline length could be a good indicator for seeing which headlines won’t be funny, rather than which ones are the funniest. Another metric for looking at the length of a headline is the number of clause separators, shown in Figure \ref{fig:clause_sep} surprisingly follows a different trend to that of just counting the number of words. However, it still seems like it can be used as an indicator of assessing the funniness, as the lower the number of clause separators, the higher the score for that headline.
+
+\begin{figure*}[htp]
+\centering
+\subfloat[Semantic word similarity\label{fig:word_sim}]{\includegraphics[width=.3\textwidth]{Graphs/DataAnalysis/cosine_distance.png}}\quad
+\subfloat[Word spelling similarity\label{fig:lev_dist}]{\includegraphics[width=.3\textwidth]{Graphs/DataAnalysis/levenshtein_distance.png}}\quad
+\subfloat[Semantic sentence similarity\label{fig:sent_sim}]{\includegraphics[width=.3\textwidth]{Graphs/DataAnalysis/cosine_sentence_distance.png}}
+
+\medskip
+
+\subfloat[Headline length\label{fig:headline_len}]{\includegraphics[width=.3\textwidth]{Graphs/DataAnalysis/headline_length.png}}\quad
+\subfloat[\# of Clause Separators\label{fig:clause_sep}]{\includegraphics[width=.3\textwidth]{Graphs/DataAnalysis/clause_separator.png}}
+
+\caption{How various metrics affect the funniness of a headline}
+\label{pics:data-analysis-metrics}
+\end{figure*}
 
 \section{Introduction}
 
